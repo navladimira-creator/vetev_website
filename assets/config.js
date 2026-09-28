@@ -69,10 +69,11 @@ window.VETEV_CONFIG = {
     { id: "chleb-vetev",     name: "Chléb Větev",               desc: "pšenice, žito, kmín",          price: null, photo: "chleb-vetev.jpg" },
     { id: "chleb-sestizrno", name: "Chléb Šestizrno",           desc: "pšenice, zápara ze 6 zrn",     price: null, photo: "chleb-sestizrno.jpg" },
     { id: "chleb-maly",      name: "Chléb malý kulatý",         desc: "žito, pšenice, kmín",          price: null, photo: "chleb-maly.jpg" },
+    { id: "chleb-skvarkovy", name: "Chléb škvarkový",           desc: "",                             price: null, photo: "", days: [2, 4] },
     { id: "bageta-dm",       name: "Dýňovo-mrkvová bageta",     desc: "",                             price: null, photo: "bageta-dm.jpg" },
     { id: "zemle",           name: "Jogurtovo-máslová žemle",   desc: "",                             price: null, photo: "zemle.jpg" },
     { id: "loupak",          name: "Loupák",                    desc: "",                             price: null, photo: "loupak.jpg" },
-    { id: "coko-loupak",     name: "Čoko loupák",               desc: "",                             price: null, photo: "" },
+    { id: "coko-loupak",     name: "Čoko loupák",               desc: "",                             price: null, photo: "loupak.jpg" },
     { id: "kolacky",         name: "Koláčky, různé druhy",      desc: "Náplně se liší podle nálady pekaře, přesný druh nejde objednat :-)", price: null, photo: "kolacky.jpg" }
   ]
 };
