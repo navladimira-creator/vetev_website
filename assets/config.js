@@ -5,12 +5,17 @@
  * nabídka pečiva a připojení k databázi. Zbytek kódu není potřeba otevírat.
  */
 window.VETEV_CONFIG = {
-  /* --- Databáze (Supabase) ---
-   * Dokud jsou obě hodnoty prázdné, web běží v UKÁZKOVÉM REŽIMU:
+  /* --- Databáze (Firebase) ---
+   * Dokud je apiKey prázdný, web běží v UKÁZKOVÉM REŽIMU:
    * rezervace se ukládají jen v prohlížeči, ve kterém byly odeslány.
-   * Hodnoty najdete v Supabase: Project Settings → API. */
-  supabaseUrl: "",
-  supabaseAnonKey: "",
+   * Hodnoty najdete ve Firebase: Project settings → Your apps → Web app → SDK setup and configuration → Config.
+   * Tyto údaje jsou veřejné a smí být ve webu – data chrání pravidla v firebase/firestore.rules. */
+  firebase: {
+    apiKey: "",
+    authDomain: "",
+    projectId: "",
+    appId: ""
+  },
 
   cafe: {
     name: "Větev",

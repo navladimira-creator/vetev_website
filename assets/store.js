@@ -1,6 +1,6 @@
 /*
  * Úložiště rezervací.
- * - Když je v config.js vyplněná Supabase → skutečná databáze (hosté zapisují,
+ * - Když je v config.js vyplněný Firebase → skutečná databáze (hosté zapisují,
  *   personál po přihlášení čte a upravuje, změny se zobrazují živě).
  * - Jinak ukázkový režim v prohlížeči (localStorage) s několika vzorovými záznamy.
  *
@@ -9,51 +9,42 @@
  */
 (function () {
   const C = window.VETEV_CONFIG;
-  const live = !!(C.supabaseUrl && C.supabaseAnonKey && window.supabase);
+  const F = C.firebase || {};
+  const configured = !!(F.apiKey && F.projectId);
+  const live = configured && !!(window.firebase && firebase.firestore);
   const pad = n => String(n).padStart(2, "0");
   const dkey = d => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
 
-  /* ---------- Supabase ---------- */
-  function supabaseStore() {
-    const sb = window.supabase.createClient(C.supabaseUrl, C.supabaseAnonKey, {
-      auth: { persistSession: true, autoRefreshToken: true }
-    });
-    const T = "reservations";
+  /* ---------- Firebase (Firestore) ---------- */
+  function firebaseStore() {
+    firebase.initializeApp(F);
+    const db = firebase.firestore();
+    const auth = firebase.auth ? firebase.auth() : null;   // přihlášení jen na stránce pro personál
+    const col = db.collection("reservations");
+    const toRow = d => { const x = d.data(); return Object.assign({}, x, { id: d.id, created_at: x.created_at && x.created_at.toDate ? x.created_at.toDate().toISOString() : null }); };
+    const authReady = auth ? new Promise(res => { const off = auth.onAuthStateChanged(u => { off(); res(u); }); }) : Promise.resolve(null);
     return {
       mode: "live",
       async add(rec) {
-        const { error } = await sb.from(T).insert(rec);
-        if (error) throw error;
+        await col.add(Object.assign({}, rec, { done: false, created_at: firebase.firestore.FieldValue.serverTimestamp() }));
       },
-      async session() {
-        const { data } = await sb.auth.getSession();
-        return data.session;
-      },
-      async login(email, password) {
-        const { error } = await sb.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-      },
-      async logout() { await sb.auth.signOut(); },
+      async session() { await authReady; return auth && auth.currentUser; },
+      async login(email, password) { await auth.signInWithEmailAndPassword(email, password); },
+      async logout() { if (auth) await auth.signOut(); },
       async range(from, to) {
-        const { data, error } = await sb.from(T).select("*")
-          .gte("date", from).lte("date", to).order("date").order("time").limit(5000);
-        if (error) throw error;
-        return data;
+        const snap = await col.where("date", ">=", from).where("date", "<=", to).get();
+        return snap.docs.map(toRow);
       },
       watch(onChange) {
-        const ch = sb.channel("reservations-live")
-          .on("postgres_changes", { event: "*", schema: "public", table: T }, () => onChange())
-          .subscribe();
-        return () => sb.removeChannel(ch);
+        // hlídá rezervace od minulého měsíce dál – nová rezervace nebo změna z jiného zařízení se hned projeví
+        const since = new Date(); since.setDate(since.getDate() - 31);
+        let first = true;
+        return col.where("date", ">=", dkey(since)).onSnapshot(
+          () => { if (first) { first = false; return; } onChange(); },
+          err => console.error("Živé spojení:", err));
       },
-      async update(id, patch) {
-        const { error } = await sb.from(T).update(patch).eq("id", id);
-        if (error) throw error;
-      },
-      async remove(id) {
-        const { error } = await sb.from(T).delete().eq("id", id);
-        if (error) throw error;
-      }
+      async update(id, patch) { await col.doc(id).update(patch); },
+      async remove(id) { await col.doc(id).delete(); }
     };
   }
 
@@ -106,6 +97,5 @@
     return { mode: "offline", add: fail, session: async () => null, login: fail, logout: async () => {}, range: fail, watch: () => () => {}, update: fail, remove: fail };
   }
 
-  const configured = !!(C.supabaseUrl && C.supabaseAnonKey);
-  window.VetevStore = live ? supabaseStore() : configured ? brokenStore() : demoStore();
+  window.VetevStore = live ? firebaseStore() : configured ? brokenStore() : demoStore();
 })();

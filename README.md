@@ -7,7 +7,7 @@ Web kavárny Větev (Mirotice) s online rezervací **stolů** a **pečiva k vyzv
 | `index.html` | Web pro hosty: úvod, o kavárně, rezervace, otevírací doba, kontakt, mapa |
 | `dashboard.html` | Přehled pro personál. Na iPadu se ukládá jako ikona na plochu |
 | `assets/config.js` | **Nastavení.** Kontakty, otevírací doba, nabídka pečiva, připojení k databázi |
-| `supabase/schema.sql` | Databáze a bezpečnostní pravidla (spouští se jednou v Supabase) |
+| `firebase/firestore.rules` | Bezpečnostní pravidla databáze (vkládají se jednou do Firebase) |
 
 Dokud není připojená databáze, web běží v **ukázkovém režimu**: rezervace se ukládají jen v prohlížeči, ze kterého byly odeslány.
 
@@ -21,19 +21,24 @@ Dokud není připojená databáze, web běží v **ukázkovém režimu**: rezerv
 
 Vlastní doménu (např. `cafevetev.cz`) jde připojit později ve stejném místě pod **Custom domain**.
 
-## 2. Databáze (Supabase, zdarma)
+## 2. Databáze (Firebase od Googlu, zdarma, nikdy se neuspí)
 
-1. Založte účet na [supabase.com](https://supabase.com) (přihlášení přes GitHub) → **New project**. Region zvolte **Frankfurt (eu-central-1)**.
-2. V projektu otevřete **SQL Editor** → **New query**, vložte celý obsah `supabase/schema.sql` a klikněte na **Run**.
-   - V souboru je e-mail personálu `budnavetvi@gmail.com`. Pokud se bude přihlašovat jiný e-mail, změňte ho před spuštěním.
-3. **Authentication → Users → Add user → Create new user.** Zadejte stejný e-mail a heslo pro personál a zaškrtněte *Auto Confirm User*.
-4. **Authentication → Sign In / Providers → vypněte „Allow new users to sign up“**, aby si nikdo cizí nemohl založit účet.
-5. **Project Settings → API (Data API)**: zkopírujte **Project URL** a klíč **anon public** do `assets/config.js`:
+1. Otevřete [console.firebase.google.com](https://console.firebase.google.com) a přihlaste se Google účtem kavárny. Klikněte na **Create a project** a zadejte název `vetev-rezervace`. Google Analytics můžete vypnout.
+2. **Databáze:** v levém menu zvolte **Build → Firestore Database → Create database**. Jako umístění vyberte **eur3 (Europe)** nebo **europe-west3 (Frankfurt)**, dále **Start in production mode → Create**.
+3. **Pravidla:** ve Firestore otevřete záložku **Rules**, smažte vše, co tam je, vložte celý obsah souboru `firebase/firestore.rules` a klikněte na **Publish**.
+   - V pravidlech je e-mail personálu `budnavetvi@gmail.com`. Pokud se bude přihlašovat jiný, změňte ho.
+4. **Přihlášení personálu:** zvolte **Build → Authentication → Get started → Email/Password → Enable → Save**. Potom na záložce **Users → Add user** zadejte e-mail personálu (stejný jako v pravidlech) a heslo.
+5. **Připojení webu:** klikněte na ozubené kolo **⚙ → Project settings**, dole v části **Your apps** klikněte na ikonu **</>** (Web), zadejte název `web` a klikněte na **Register app**. Zobrazí se `firebaseConfig`. Hodnoty `apiKey`, `authDomain`, `projectId` a `appId` zkopírujte do `assets/config.js`:
    ```js
-   supabaseUrl: "https://xxxx.supabase.co",
-   supabaseAnonKey: "eyJhbGciOi…",
+   firebase: {
+     apiKey: "AIza…",
+     authDomain: "vetev-rezervace.firebaseapp.com",
+     projectId: "vetev-rezervace",
+     appId: "1:…:web:…"
+   },
    ```
-   Klíč *anon* je veřejný a smí být ve webu. Klíč **service_role** do webu **nikdy nedávejte**.
+   Tyto údaje jsou veřejné a smí být ve webu. Data chrání pravidla z kroku 3.
+6. **Authentication → Settings → Authorized domains → Add domain**: přidejte `navladimira-creator.github.io`, případně později i vlastní doménu.
 
 Po uložení se ukázkový režim sám vypne.
 
@@ -51,11 +56,11 @@ Přehled se pak otevírá jako samostatná aplikace a přihlášení si pamatuje
 
 Všechno běžné se mění v `assets/config.js`:
 - **Otevírací doba a zavřené dny** (`hours`, `closedDates`). Formulář podle nich nabízí jen časy, kdy je otevřeno.
-- **Nabídka pečiva** (`pastry`). ⚠️ Zatím je tam ukázková nabídka, je potřeba ji nahradit skutečnou.
-- **Pravidla rezervací** (`reservations`): max. počet osob, jak dlouho dopředu, poslední čas před zavřením.
+- **Nabídka pečiva** (`pastry`): názvy, složení a případně ceny.
+- **Pravidla rezervací** (`reservations`): max. počet osob (při změně upravte i limit v `firebase/firestore.rules`), jak dlouho dopředu, poslední čas před zavřením.
 
 ## Bezpečnost
 
 - Host z webu může rezervaci jen **vložit**. Cizí rezervace nikdy nevidí.
-- Číst, označovat a rušit rezervace může jen přihlášený účet, jehož e-mail je v tabulce `staff`.
+- Číst, označovat a rušit rezervace může jen přihlášený účet, jehož e-mail je uvedený v pravidlech (`firebase/firestore.rules`).
 - Repozitář je veřejný, takže je v něm vidět kód. Hesla ani tajné klíče v něm nejsou a být nesmí.
