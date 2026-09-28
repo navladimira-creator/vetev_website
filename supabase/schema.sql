@@ -14,7 +14,7 @@ create table if not exists public.reservations (
   name        text not null check (char_length(name) between 3 and 120),
   phone       text not null check (char_length(phone) between 9 and 30),
   email       text not null check (char_length(email) between 5 and 160),
-  people      int  check (people between 1 and 12),
+  people      int  check (people between 1 and 6),
   items       jsonb,
   note        text check (char_length(note) <= 500),
   done        boolean not null default false,

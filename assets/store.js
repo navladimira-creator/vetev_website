@@ -59,7 +59,7 @@
 
   /* ---------- Ukázkový režim ---------- */
   function demoStore() {
-    const KEY = "vetev-demo-v1";
+    const KEY = "vetev-demo-v2";
     const listeners = new Set();
     function read() {
       try {
@@ -78,11 +78,11 @@
       const mk = (o) => Object.assign({ id: "demo-" + Math.random().toString(36).slice(2, 9), done: false, demo: true, created_at: new Date().toISOString(), note: "" }, o);
       return [
         mk({ kind: "table", date: dkey(t),  time: "10:00", name: "Jana Dvořáková", phone: "+420 777 123 456", email: "jana@example.cz", people: 2, note: "Stůl u okna, pokud to půjde." }),
-        mk({ kind: "table", date: dkey(t),  time: "14:30", name: "Petr Svoboda",   phone: "+420 603 555 210", email: "petr@example.cz", people: 6, note: "Oslava narozenin, přineseme vlastní dort." }),
+        mk({ kind: "table", date: dkey(t),  time: "14:30", name: "Petr Svoboda",   phone: "+420 603 555 210", email: "petr@example.cz", people: 5, note: "Oslava narozenin, přineseme vlastní dort." }),
         mk({ kind: "table", date: dkey(d1), time: "09:30", name: "Lucie Králová",  phone: "+420 728 900 111", email: "lucie@example.cz", people: 3, note: "Potřebujeme dětskou židličku." }),
-        mk({ kind: "pastry", date: dkey(t), time: "08:30", name: "Martin Novák",   phone: "+420 602 444 333", email: "martin@example.cz", items: { croissant: 4, snek: 2 } }),
-        mk({ kind: "pastry", date: dkey(t), time: "11:00", name: "Eva Horáková",   phone: "+420 731 222 999", email: "eva@example.cz", items: { chleb: 1, croissant: 2, bageta: 2 }, note: "Chléb prosím nakrájet." }),
-        mk({ kind: "pastry", date: dkey(d2), time: "09:00", name: "Tomáš Beneš",   phone: "+420 604 111 222", email: "tomas@example.cz", items: { kolac: 12 }, note: "Na poradu do práce." })
+        mk({ kind: "pastry", date: dkey(t), time: "08:30", name: "Martin Novák",   phone: "+420 602 444 333", email: "martin@example.cz", items: { loupak: 4, "coko-loupak": 2 } }),
+        mk({ kind: "pastry", date: dkey(t), time: "11:00", name: "Eva Horáková",   phone: "+420 731 222 999", email: "eva@example.cz", items: { "chleb-vetev": 1, zemle: 6, "bageta-dm": 1 }, note: "Chléb prosím nakrájet." }),
+        mk({ kind: "pastry", date: dkey(d2), time: "09:00", name: "Tomáš Beneš",   phone: "+420 604 111 222", email: "tomas@example.cz", items: { kolacky: 12 }, note: "Na poradu do práce." })
       ];
     }
     let memory = read();

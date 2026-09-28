@@ -25,7 +25,7 @@ window.VETEV_CONFIG = {
     mapsEmbed: "https://www.google.com/maps?q=N%C3%A1m%C4%9Bst%C3%AD%20Mikol%C3%A1%C5%A1e%20Al%C5%A1e%2068%2C%20398%2001%20Mirotice&output=embed",
     facebook: "https://www.facebook.com/vetevkavarna/",
     instagram: "https://www.instagram.com/vetev_kavarna/",
-    eshop: "https://www.cafevetev.cz/"
+    eshop: "https://www.produkty-vladimir.cz/kava/"
   },
 
   /* Otevírací doba. Den 0 = neděle, 1 = pondělí … 6 = sobota.
@@ -44,7 +44,7 @@ window.VETEV_CONFIG = {
   closedDates: [],
 
   reservations: {
-    maxPeople: 12,            // víc osob = host musí zavolat
+    maxPeople: 6,             // víc osob = host musí zavolat
     slotMinutes: 30,          // krok časů ve formuláři
     lastTableBeforeClose: 60, // poslední rezervace stolu X minut před zavřením
     lastPickupBeforeClose: 30,// poslední vyzvednutí pečiva X minut před zavřením
@@ -53,14 +53,16 @@ window.VETEV_CONFIG = {
   },
 
   /* Nabídka pečiva k vyzvednutí.
-   * !!! UKÁZKOVÁ NABÍDKA – nahraďte skutečným sortimentem a cenami. !!!
-   * id = krátký kód bez mezer a diakritiky (neměnit u už použitých položek). */
+   * id = krátký kód bez mezer a diakritiky (u už použitých položek neměnit).
+   * desc = popis pod názvem, price = cena v Kč (null = cena se nezobrazuje). */
   pastry: [
-    { id: "croissant",  name: "Máslový croissant",   unit: "kus",        price: 45 },
-    { id: "snek",       name: "Skořicový šnek",      unit: "kus",        price: 55 },
-    { id: "kolac",      name: "Domácí koláč",        unit: "kus",        price: 35 },
-    { id: "chleb",      name: "Kváskový chléb",      unit: "bochník",    price: 95 },
-    { id: "bageta",     name: "Bageta",              unit: "kus",        price: 40 },
-    { id: "banana",     name: "Banánový chlebíček",  unit: "celá forma", price: 290 }
+    { id: "chleb-vetev",     name: "Chléb Větev",               desc: "pšenice, žito, kmín",          price: null },
+    { id: "chleb-sestizrno", name: "Chléb Šestizrno",           desc: "pšenice, zápara ze 6 zrn",     price: null },
+    { id: "chleb-maly",      name: "Chléb malý kulatý",         desc: "žito, pšenice, kmín",          price: null },
+    { id: "bageta-dm",       name: "Dýňovo-mrkvová bageta",     desc: "",                             price: null },
+    { id: "zemle",           name: "Jogurtovo-máslová žemle",   desc: "",                             price: null },
+    { id: "loupak",          name: "Loupák",                    desc: "",                             price: null },
+    { id: "coko-loupak",     name: "Čoko loupák",               desc: "",                             price: null },
+    { id: "kolacky",         name: "Koláčky, různé druhy",      desc: "Náplně se liší podle nálady pekaře, přesný druh nejde objednat :-)", price: null }
   ]
 };

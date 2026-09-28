@@ -71,11 +71,13 @@
   /* ---------- Nabídka pečiva ---------- */
   const qty = {};
   const kc = n => n.toLocaleString("cs-CZ") + " Kč";
+  const priced = C.pastry.some(p => p.price);
+  $("pTotalRow").hidden = !priced;
   function total() { let s = 0; for (const k in qty) s += qty[k] * (U.pastryById[k].price || 0); $("pTotal").textContent = kc(s); }
   C.pastry.forEach(m => {
     qty[m.id] = 0;
     const row = document.createElement("div"); row.className = "menu-item";
-    row.innerHTML = '<div><div class="n">' + U.esc(m.name) + '</div><div class="d num">' + U.esc(m.unit) + (m.price ? " · " + kc(m.price) : "") + '</div></div>' +
+    row.innerHTML = '<div><div class="n">' + U.esc(m.name) + '</div>' + ((m.desc || m.price) ? '<div class="d">' + U.esc([m.desc, m.price ? kc(m.price) : ""].filter(Boolean).join(" · ")) + '</div>' : '') + '</div>' +
       '<div class="stepper"><button type="button" aria-label="Ubrat: ' + U.esc(m.name) + '">−</button><output class="num" aria-live="polite">0</output><button type="button" aria-label="Přidat: ' + U.esc(m.name) + '">+</button></div>';
     const [minus, plus] = row.querySelectorAll("button"), out = row.querySelector("output");
     const upd = () => { out.textContent = qty[m.id]; minus.disabled = qty[m.id] <= 0; total(); };
@@ -143,7 +145,7 @@
     if (await send(rec, err, $("pSubmit"))) {
       const list = Object.entries(items).map(([k, q]) => q + "× " + U.pastryById[k].name).join(", ");
       showDone("Pečivo k vyzvednutí", "Děkujeme, pečivo vám připravíme",
-        [["Vyzvednutí", U.fmtLong(U.fromKey(rec.date)) + ", " + rec.time], ["Objednávka", list], ["Celkem orientačně", $("pTotal").textContent], ["Na jméno", rec.name]]);
+        [["Vyzvednutí", U.fmtLong(U.fromKey(rec.date)) + ", " + rec.time], ["Objednávka", list]].concat(priced ? [["Celkem orientačně", $("pTotal").textContent]] : []).concat([["Na jméno", rec.name]]));
       $("formP").reset(); C.pastry.forEach(m => m._reset()); $("pDate").value = firstOpenDay(R.lastPickupBeforeClose); refreshP();
     }
   });
