@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kavárna Větev · Mirotice</title>
+<meta name="description" content="Kavárna, pražírna a prodejna Větev na náměstí v Miroticích. Výběrová káva z vlastní pražírny, voňavé pečivo a domácí dezerty. Rezervujte si stůl nebo pečivo online.">
+<meta name="theme-color" content="#2E5A3C">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;800&family=Figtree:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="demo-bar" id="demoBar" hidden>Ukázkový režim: rezervace se zatím ukládají jen v tomto prohlížeči.</div>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="logo" href="#top"><span data-logo></span><span>Větev</span></a>
+    <nav class="nav" aria-label="Hlavní menu">
+      <a href="#kavarna">Kavárna</a>
+      <a href="#navsteva">Otevřeno</a>
+      <a href="#kontakt">Kontakt</a>
+      <a class="btn btn-primary" href="#rezervace">Rezervovat</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <svg class="branch" viewBox="0 0 560 420" aria-hidden="true">
+      <path d="M560 60 C470 90 400 150 330 220 C270 280 200 330 110 360"/>
+      <path d="M430 120 C440 80 470 50 500 40"/>
+      <path d="M300 250 C300 210 320 180 350 165"/>
+      <path class="lf" d="M500 40 C520 20 548 18 556 24 C548 44 522 52 500 40Z"/>
+      <path class="lf" d="M455 88 C448 58 462 36 478 30 C488 52 476 76 455 88Z"/>
+      <path class="lf" d="M350 165 C372 150 400 152 410 160 C398 178 372 182 350 165Z"/>
+      <path class="lf" d="M318 196 C300 176 298 150 306 140 C326 150 330 176 318 196Z"/>
+      <path class="lf" d="M232 300 C250 280 280 276 292 282 C282 302 254 310 232 300Z"/>
+      <path class="lf" d="M198 318 C176 304 168 280 172 268 C194 274 204 298 198 318Z"/>
+      <path class="lf" d="M140 348 C156 330 180 326 190 330 C182 348 160 356 140 348Z"/>
+    </svg>
+    <div class="wrap">
+      <div>
+        <div class="eyebrow"><span>Kavárna</span><span>Pražírna</span><span>Prodejna</span></div>
+        <h1>Všude dobře, na&nbsp;<em>Větvi</em> nejlíp!</h1>
+        <p class="lead">Útulná kavárna na náměstí v Miroticích. Kávu si pražíme sami, pečivo voní od rána a dezerty děláme doma. Stavte se, nebo si stůl či pečivo zarezervujte předem.</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#rezervace" data-open="t">Rezervovat stůl</a>
+          <a class="btn btn-ghost" href="#rezervace" data-open="p">Objednat pečivo</a>
+        </div>
+      </div>
+      <aside class="today-card" aria-label="Dnešní otevírací doba">
+        <span class="state" id="openState"><i></i><span>Otevírací doba</span></span>
+        <div class="big num" id="todayHours">8:00–17:30</div>
+        <dl>
+          <dt>Adresa</dt><dd data-bind="street">Náměstí Mikoláše Alše 68</dd>
+          <dt></dt><dd data-bind="city">398 01 Mirotice</dd>
+          <dt>Telefon</dt><dd class="num" data-bind="phone">+420 737 927 337</dd>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <section class="block alt" id="kavarna">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="label">Co u nás najdete</span>
+        <h2>Kavárna, pražírna a prodejna pod jednou střechou</h2>
+        <p>Čeká na vás opravdu útulné prostředí, skvělá káva, voňavé pečivo, domácí dezerty a milá obsluha.</p>
+      </div>
+      <div class="trio">
+        <article>
+          <span class="k">01 · Kavárna</span>
+          <h3>Posezení na náměstí</h3>
+          <p>Espresso, filtr i mléčné nápoje z kávy, kterou známe od zeleného zrna až po šálek. Ideální na ranní kávu i odpolední setkání.</p>
+        </article>
+        <article>
+          <span class="k">02 · Pražírna</span>
+          <h3>Káva z vlastní pražírny</h3>
+          <p>Zrnkovou kávu pražíme sami. Koupíte ji u nás na baru, nebo pohodlně z domova.</p>
+          <a data-href="eshop" href="https://www.cafevetev.cz/">Do e-shopu s kávou →</a>
+        </article>
+        <article>
+          <span class="k">03 · Pečivo a dezerty</span>
+          <h3>Voňavé pečivo každý den</h3>
+          <p>Croissanty, koláče, chleba i domácí dezerty. Pečivo si můžete objednat předem a jen si ho vyzvednout.</p>
+          <a href="#rezervace" data-open="p">Objednat pečivo →</a>
+        </article>
+      </div>
+      <div class="amen" aria-label="Vybavení">
+        <span>Vhodné pro rodiny s dětmi</span><span>Wi-Fi zdarma</span><span>Platba kartou</span><span>Parkování</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="rezervace">
+    <div class="wrap book">
+      <aside>
+        <div class="block-head" style="margin:0">
+          <span class="label">Rezervace online</span>
+          <h2>Stůl nebo pečivo, bez telefonování</h2>
+        </div>
+        <ul>
+          <li>Stůl rezervujete až pro 12 osob, pro větší skupiny nám zavolejte.</li>
+          <li>Pečivo vám připravíme na zvolený čas a vyzvednete ho na baru.</li>
+          <li>Rezervace uvidíme hned po odeslání. Pokud bude potřeba něco změnit, ozveme se vám.</li>
+        </ul>
+        <p class="hint">Potřebujete něco změnit? Zavolejte na <strong class="num" data-bind="phone">+420 737 927 337</strong>.</p>
+      </aside>
+
+      <div>
+        <div class="seg" role="tablist" aria-label="Typ rezervace">
+          <button id="tabT" role="tab" aria-selected="true" aria-controls="formT" type="button">Rezervovat stůl</button>
+          <button id="tabP" role="tab" aria-selected="false" aria-controls="formP" type="button">Pečivo k vyzvednutí</button>
+        </div>
+        <div class="card">
+          <form class="form" id="formT" novalidate>
+            <div class="row">
+              <div class="field"><label for="tDate">Datum</label><input type="date" id="tDate" required></div>
+              <div class="field"><label for="tTime">Čas</label><select id="tTime" required></select></div>
+            </div>
+            <p class="closed-note" id="tClosed" hidden></p>
+            <div class="field">
+              <span class="flabel" id="tPaxLbl">Počet osob</span>
+              <div class="stepper" role="group" aria-labelledby="tPaxLbl">
+                <button type="button" id="tMinus" aria-label="Méně osob">−</button>
+                <output id="tPax" class="num" aria-live="polite">2</output>
+                <button type="button" id="tPlus" aria-label="Více osob">+</button>
+              </div>
+            </div>
+            <div class="field"><label for="tName">Jméno a příjmení</label><input type="text" id="tName" autocomplete="name" required></div>
+            <div class="row">
+              <div class="field"><label for="tPhone">Telefon</label><input type="tel" id="tPhone" autocomplete="tel" placeholder="+420 …" required></div>
+              <div class="field"><label for="tEmail">E-mail</label><input type="email" id="tEmail" autocomplete="email" required></div>
+            </div>
+            <div class="field"><label for="tNote">Speciální požadavek <span class="hint">(nepovinné)</span></label><textarea id="tNote" maxlength="500" placeholder="Např. dětská židlička, stůl u okna, oslava, alergie…"></textarea></div>
+            <p class="err" id="tErr" role="alert"></p>
+            <button class="btn btn-primary" type="submit" id="tSubmit">Odeslat rezervaci</button>
+          </form>
+
+          <form class="form" id="formP" novalidate hidden>
+            <div class="field">
+              <span class="flabel">Co si objednáváte</span>
+              <div class="menu" id="menu"></div>
+              <div class="total"><span>Celkem orientačně</span><span class="num" id="pTotal">0 Kč</span></div>
+            </div>
+            <div class="row">
+              <div class="field"><label for="pDate">Den vyzvednutí</label><input type="date" id="pDate" required></div>
+              <div class="field"><label for="pTime">Čas vyzvednutí</label><select id="pTime" required></select></div>
+            </div>
+            <p class="closed-note" id="pClosed" hidden></p>
+            <div class="field"><label for="pName">Jméno a příjmení</label><input type="text" id="pName" autocomplete="name" required></div>
+            <div class="row">
+              <div class="field"><label for="pPhone">Telefon</label><input type="tel" id="pPhone" autocomplete="tel" placeholder="+420 …" required></div>
+              <div class="field"><label for="pEmail">E-mail</label><input type="email" id="pEmail" autocomplete="email" required></div>
+            </div>
+            <div class="field"><label for="pNote">Poznámka <span class="hint">(nepovinné)</span></label><textarea id="pNote" maxlength="500" placeholder="Např. nakrájet chléb, zabalit jako dárek…"></textarea></div>
+            <p class="hint">Platí se až při vyzvednutí.</p>
+            <p class="err" id="pErr" role="alert"></p>
+            <button class="btn btn-primary" type="submit" id="pSubmit">Objednat pečivo</button>
+          </form>
+
+          <div class="done-box" id="done" hidden tabindex="-1">
+            <span class="label" id="doneLabel">Hotovo</span>
+            <h3 id="doneTitle">Děkujeme</h3>
+            <dl id="doneList"></dl>
+            <button class="btn btn-ghost" type="button" id="doneAgain" style="justify-self:start">Nová rezervace</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt" id="navsteva">
+    <div class="wrap visit">
+      <div id="kontakt">
+        <div class="block-head" style="margin-bottom:18px">
+          <span class="label">Návštěva</span>
+          <h2>Kdy máme otevřeno</h2>
+        </div>
+        <table class="hours num" id="hoursTable"></table>
+        <div class="contact">
+          <div><span class="label">Adresa</span><span class="v"><span data-bind="street">Náměstí Mikoláše Alše 68</span>, <span data-bind="city">398 01 Mirotice</span></span><a data-href="mapsUrl" href="#" target="_blank" rel="noopener">Otevřít v mapách →</a></div>
+          <div><span class="label">Telefon</span><span class="v num" data-bind="phone">+420 737 927 337</span></div>
+          <div><span class="label">E-mail</span><span class="v" data-bind="email">budnavetvi@gmail.com</span></div>
+        </div>
+      </div>
+      <div class="map"><iframe id="mapFrame" title="Mapa: Kavárna Větev, Mirotice" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>© <span id="year">2026</span> Kavárna Větev · IČO <span data-bind="ico">02980118</span></span>
+    <nav aria-label="Odkazy">
+      <a data-href="facebook" href="#" target="_blank" rel="noopener">Facebook</a>
+      <a data-href="instagram" href="#" target="_blank" rel="noopener">Instagram</a>
+      <a data-href="eshop" href="#" target="_blank" rel="noopener">E-shop</a>
+      <a href="dashboard.html">Pro personál</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/common.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

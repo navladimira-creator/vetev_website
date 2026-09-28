@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Větev · Rezervace</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2E5A3C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Rezervace">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;800&family=Figtree:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="demo-bar" id="demoBar" hidden>Ukázkový režim: vidíte vzorové rezervace a to, co bylo odesláno z tohoto prohlížeče.</div>
+
+<!-- Přihlášení -->
+<main class="login" id="loginView" hidden>
+  <form class="card form" id="loginForm" novalidate>
+    <div class="logo"><span data-logo></span><span>Větev · rezervace</span></div>
+    <p class="hint">Přehled je jen pro personál. Přihlaste se účtem kavárny.</p>
+    <div class="field"><label for="lEmail">E-mail</label><input type="email" id="lEmail" autocomplete="username" required></div>
+    <div class="field"><label for="lPass">Heslo</label><input type="password" id="lPass" autocomplete="current-password" required></div>
+    <p class="err" id="lErr" role="alert"></p>
+    <button class="btn btn-primary" type="submit" id="lSubmit">Přihlásit</button>
+  </form>
+</main>
+
+<!-- Přehled -->
+<main class="dash" id="dashView" hidden>
+  <div class="topbar">
+    <div>
+      <div class="logo"><span data-logo></span><span>Rezervace</span></div>
+      <div class="sub" id="liveState">Načítám…</div>
+    </div>
+    <div class="tools">
+      <button class="icon-btn" id="yPrev" type="button" aria-label="Předchozí rok">‹</button>
+      <strong class="yl num" id="yLbl">2026</strong>
+      <button class="icon-btn" id="yNext" type="button" aria-label="Další rok">›</button>
+      <a class="pill-btn" href="index.html" target="_blank" rel="noopener">Web</a>
+      <button class="pill-btn" type="button" id="logout">Odhlásit</button>
+    </div>
+  </div>
+
+  <div class="months-wrap"><div class="months" id="months" aria-label="Měsíce"></div></div>
+  <div class="days-wrap" id="daysWrap"><div class="days" id="days" aria-label="Dny v měsíci"></div></div>
+
+  <div class="dayhead">
+    <h2 id="dayTitle">—</h2>
+    <div class="nav">
+      <button class="pill-btn" type="button" id="goToday">Dnes</button>
+      <button class="icon-btn" type="button" id="dPrev" aria-label="Předchozí den">‹</button>
+      <button class="icon-btn" type="button" id="dNext" aria-label="Další den">›</button>
+    </div>
+  </div>
+
+  <div class="cols" id="swipeArea">
+    <section class="panel t">
+      <div class="panel-h"><h3>Stoly</h3><span class="sum num" id="tSum"></span></div>
+      <ul class="list" id="tList"></ul>
+    </section>
+    <section class="panel p">
+      <div class="panel-h"><h3>Pečivo k vyzvednutí</h3><span class="sum num" id="pSum"></span></div>
+      <div class="prep" id="prep" hidden><span class="label">Připravit na tento den</span><ul id="prepList"></ul></div>
+      <ul class="list" id="pList"></ul>
+    </section>
+  </div>
+</main>
+
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/common.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/dashboard.js"></script>
+</body>
+</html>
