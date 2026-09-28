@@ -11,10 +11,10 @@ window.VETEV_CONFIG = {
    * Hodnoty najdete ve Firebase: Project settings → Your apps → Web app → SDK setup and configuration → Config.
    * Tyto údaje jsou veřejné a smí být ve webu – data chrání pravidla v firebase/firestore.rules. */
   firebase: {
-    apiKey: "",
-    authDomain: "",
-    projectId: "",
-    appId: ""
+    apiKey: "AIzaSyBzUbgYa-TGiR3OZzxBS1M8BuhLoNj-wqA",
+    authDomain: "vetev-rezervace.firebaseapp.com",
+    projectId: "vetev-rezervace",
+    appId: "1:220667236472:web:c67dfdd694b60bfea59d8d"
   },
 
   cafe: {
