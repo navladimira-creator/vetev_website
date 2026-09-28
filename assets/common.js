@@ -15,6 +15,8 @@
   const DAYS_SHORT = ["ne", "po", "út", "st", "čt", "pá", "so"];
   /* Pečivo: peče se v daný den? (bez "days" = každý den) */
   const bakedOn = (item, d) => !item || !Array.isArray(item.days) || !item.days.length || item.days.includes(d.getDay());
+  const DAYS_IN = ["v neděli", "v pondělí", "v úterý", "ve středu", "ve čtvrtek", "v pátek", "v sobotu"];
+  const bakeDaysLong = item => { const l = [1, 2, 3, 4, 5, 6, 0].filter(x => item.days.includes(x)).map(x => DAYS_IN[x]); return l.length > 1 ? l.slice(0, -1).join(", ") + " a " + l[l.length - 1] : l[0]; };
   const bakeDaysText = item => [1, 2, 3, 4, 5, 6, 0].filter(x => item.days.includes(x)).map(x => DAYS_SHORT[x]).join(", ");
 
   /* Vlastní značka: větvička s lístky */
@@ -22,7 +24,7 @@
     '<path d="M11 29 C17 23 22 18 29 11" stroke="var(--green-ink)" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
     '<path d="M17 23 C13 21 12 17 13 14 C17 15 19 19 17 23Z M22 18 C24 14 28 13 30 14 C29 18 25 20 22 18Z M24 16 C22 12 23 9 25 7 C27 10 27 13 24 16Z" fill="var(--green-ink)"/></svg>';
 
-  window.VetevUtil = { C, pad, key, fromKey, today, esc, fmtLong, toMin, fromMin, hoursFor, DAYS, DAYS_SHORT, bakedOn, bakeDaysText, LOGO,
+  window.VetevUtil = { C, pad, key, fromKey, today, esc, fmtLong, toMin, fromMin, hoursFor, DAYS, DAYS_SHORT, bakedOn, bakeDaysText, bakeDaysLong, LOGO,
     pastryById: Object.fromEntries(C.pastry.map(p => [p.id, p])) };
 
   document.querySelectorAll("[data-logo]").forEach(el => { el.innerHTML = LOGO; });

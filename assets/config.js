@@ -64,12 +64,13 @@ window.VETEV_CONFIG = {
    * photo = název fotky ve složce assets/foto (bez fotky = "")
    * days = dny, kdy se položka peče (0 = neděle, 1 = pondělí … 6 = sobota).
    *        Bez "days" se peče každý den. Příklad jen pátek a sobota: days: [5, 6]
-   *        Když si host položku objedná na jiný den, web ho upozorní, že nemusí být k dispozici. */
+   *        Když si host položku objedná na jiný den, web ho upozorní, že nemusí být k dispozici.
+   * strict: true = na jiný den než v "days" položku objednat vůbec nejde (web objednávku nepustí). */
   pastry: [
     { id: "chleb-vetev",     name: "Chléb Větev",               desc: "pšenice, žito, kmín",          price: null, photo: "chleb-vetev.jpg" },
     { id: "chleb-sestizrno", name: "Chléb Šestizrno",           desc: "pšenice, zápara ze 6 zrn",     price: null, photo: "chleb-sestizrno.jpg" },
     { id: "chleb-maly",      name: "Chléb malý kulatý",         desc: "žito, pšenice, kmín",          price: null, photo: "chleb-maly.jpg" },
-    { id: "chleb-skvarkovy", name: "Chléb škvarkový",           desc: "",                             price: null, photo: "", days: [2, 4] },
+    { id: "chleb-skvarkovy", name: "Chléb škvarkový",           desc: "",                             price: null, photo: "chleb-skvarkovy.jpg", days: [2, 4], strict: true },
     { id: "bageta-dm",       name: "Dýňovo-mrkvová bageta",     desc: "",                             price: null, photo: "bageta-dm.jpg" },
     { id: "zemle",           name: "Jogurtovo-máslová žemle",   desc: "",                             price: null, photo: "zemle.jpg" },
     { id: "loupak",          name: "Loupák",                    desc: "",                             price: null, photo: "loupak.jpg" },

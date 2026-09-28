@@ -87,18 +87,22 @@
   /* Upozornění: položka se ve vybraný den nepeče */
   const DAY_IN = ["v neděli", "v pondělí", "v úterý", "ve středu", "ve čtvrtek", "v pátek", "v sobotu"];
   function checkBake() {
-    const val = $("pDate").value, d = val ? U.fromKey(val) : null, bad = [];
+    const val = $("pDate").value, d = val ? U.fromKey(val) : null, soft = [], hard = [];
     C.pastry.forEach(m => {
       if (!m._row) return;
       const off = !!d && qty[m.id] > 0 && !U.bakedOn(m, d);
       m._row.classList.toggle("warn", off);
       m._warn.hidden = !off;
-      if (off) bad.push(m.name);
+      m._warn.textContent = m.strict ? "Ve vybraný den se nepeče. Objednat lze jen na " + U.bakeDaysText(m) + "." : "Ve vybraný den se nepeče, nemusí být k dispozici.";
+      if (off) (m.strict ? hard : soft).push(m);
     });
-    const w = $("pWarn");
-    w.hidden = !bad.length;
-    if (bad.length) w.textContent = "Pozor: " + bad.join(", ") + " se " + DAY_IN[d.getDay()] + " obvykle nepeče, " + (bad.length > 1 ? "položky nemusí" : "nemusí") + " být k dispozici. Objednávku můžete odeslat, v případě potřeby se vám ozveme.";
+    const w = $("pWarn"), parts = [];
+    if (hard.length) parts.push(hard.map(m => m.name + " se peče jen " + U.bakeDaysLong(m)).join(". ") + ". Zvolte prosím jiný den vyzvednutí, nebo položku odeberte.");
+    if (soft.length) parts.push("Pozor: " + soft.map(m => m.name).join(", ") + " se " + DAY_IN[d.getDay()] + " obvykle nepeče, " + (soft.length > 1 ? "položky nemusí" : "nemusí") + " být k dispozici. Objednávku můžete odeslat, v případě potřeby se vám ozveme.");
+    w.hidden = !parts.length; w.textContent = parts.join(" ");
+    return hard;
   }
+
   function total() { let s = 0; for (const k in qty) s += qty[k] * (U.pastryById[k].price || 0); $("pTotal").textContent = kc(s); }
   C.pastry.forEach(m => {
     qty[m.id] = 0;
@@ -170,6 +174,7 @@
     const items = {}; let n = 0;
     for (const k in qty) if (qty[k] > 0) { items[k] = qty[k]; n += qty[k]; }
     if (!n) { err.textContent = "Vyberte prosím alespoň jeden druh pečiva."; return; }
+    if (checkBake().length) { err.textContent = "Některou položku v tento den nepečeme. Změňte prosím den vyzvednutí nebo ji odeberte."; $("pWarn").scrollIntoView({ block: "center", behavior: "smooth" }); return; }
     const c = contact("p", err); if (!c) return;
     const rec = Object.assign({ kind: "pastry", people: null, items, note: $("pNote").value.trim() }, c);
     if (await send(rec, err, $("pSubmit"))) {
