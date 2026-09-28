@@ -15,7 +15,7 @@
     if (!s) { $("loginView").hidden = false; $("dashView").hidden = true; $("lEmail").focus(); return; }
     $("loginView").hidden = true; $("dashView").hidden = false;
     $("logout").hidden = store.mode === "demo";
-    if (!unwatch) unwatch = store.watch(() => load(true));
+    if (!unwatch) unwatch = store.watch(added => { load(true); if (added && added.length) Alert.push(added); });
     await load(true);
   }
   $("loginForm").addEventListener("submit", async e => {
@@ -139,6 +139,89 @@
       await load(true);
     } catch (x) { console.error(x); toast("Změnu se nepodařilo uložit. Zkuste to znovu."); b.disabled = false; }
   });
+
+  /* ---------- Upozornění na novou rezervaci: zvuk + banner ---------- */
+  const Alert = (function () {
+    let ctx = null, queue = [], ringTimer = null, ringStop = 0, wake = null;
+    const baseTitle = document.title;
+    let soundOn = true;
+    try { soundOn = localStorage.getItem("vetev-sound") !== "off"; } catch (e) {}
+
+    // Safari zvuk pustí až po prvním klepnutí na obrazovku – odemkneme ho při jakémkoli dotyku
+    function unlock() {
+      try {
+        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === "suspended") ctx.resume();
+        const o = ctx.createOscillator(), g = ctx.createGain(); g.gain.value = 0; o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 0.01);
+      } catch (e) {}
+      keepAwake();
+      paintBtn();
+    }
+    ["pointerdown", "touchstart", "keydown"].forEach(ev => document.addEventListener(ev, unlock, { passive: true }));
+
+    // Obrazovka iPadu nezhasne, dokud je přehled otevřený (když to zařízení umí)
+    async function keepAwake() {
+      if (wake || !("wakeLock" in navigator) || document.hidden) return;
+      try { wake = await navigator.wakeLock.request("screen"); wake.addEventListener("release", () => { wake = null; }); } catch (e) {}
+    }
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) keepAwake(); });
+
+    function chime() {
+      if (!soundOn || !ctx || ctx.state !== "running") return;
+      const t0 = ctx.currentTime;
+      [[880, 0], [1175, 0.18], [1568, 0.36]].forEach(([f, d]) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = "sine"; o.frequency.value = f;
+        g.gain.setValueAtTime(0.0001, t0 + d); g.gain.exponentialRampToValueAtTime(0.5, t0 + d + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + d + 0.9);
+        o.connect(g).connect(ctx.destination); o.start(t0 + d); o.stop(t0 + d + 1);
+      });
+    }
+    function describe(r) {
+      const when = U.fmtLong(U.fromKey(r.date)) + ", " + r.time;
+      if (r.kind === "table") return { k: "Nová rezervace stolu", t: r.name + " · " + r.people + " os.", w: when };
+      const n = Object.values(r.items || {}).reduce((a, b) => a + Number(b), 0);
+      return { k: "Nová objednávka pečiva", t: r.name + " · " + n + " ks", w: "Vyzvednutí " + when.charAt(0).toLowerCase() + when.slice(1) };
+    }
+    function paint() {
+      const box = $("alertBox");
+      if (!queue.length) { box.hidden = true; document.title = baseTitle; return; }
+      const r = queue[0], d = describe(r);
+      $("alertKind").textContent = d.k + (queue.length > 1 ? " (+" + (queue.length - 1) + " další)" : "");
+      $("alertWho").textContent = d.t; $("alertWhen").textContent = d.w;
+      box.classList.toggle("p", r.kind === "pastry");
+      box.hidden = false;
+      document.title = "(" + queue.length + ") " + baseTitle;
+    }
+    function push(list) {
+      list.forEach(r => { if (!queue.some(q => q.id === r.id)) queue.push(r); });
+      paint(); chime();
+      // dokud to nikdo nepotvrdí, připomene se zvukem každých 20 s (nejdéle 10 minut)
+      ringStop = Date.now() + 10 * 60 * 1000;
+      clearInterval(ringTimer);
+      ringTimer = setInterval(() => { if (!queue.length || Date.now() > ringStop) { clearInterval(ringTimer); return; } chime(); }, 20000);
+    }
+    function ack(show) {
+      const r = queue.shift();
+      if (show && r) setSel(U.fromKey(r.date));
+      if (!queue.length) clearInterval(ringTimer);
+      paint();
+    }
+    $("alertShow").onclick = () => ack(true);
+    $("alertOk").onclick = () => ack(false);
+
+    function paintBtn() {
+      const b = $("soundBtn"), ready = ctx && ctx.state === "running";
+      b.textContent = !soundOn ? "🔕 Zvuk vypnutý" : ready ? "🔔 Zvuk zapnutý" : "🔔 Klepněte pro zvuk";
+      b.classList.toggle("off", !soundOn || !ready);
+    }
+    $("soundBtn").onclick = () => {
+      soundOn = !soundOn;
+      try { localStorage.setItem("vetev-sound", soundOn ? "on" : "off"); } catch (e) {}
+      paintBtn(); if (soundOn) chime();
+    };
+    paintBtn();
+    return { push, test: () => push([{ id: "test-" + Date.now(), kind: "table", date: U.key(U.today()), time: "10:00", name: "Zkušební upozornění", people: 2 }]) };
+  })();
 
   /* O půlnoci posunout „dnes“ */
   let lastDay = U.key(U.today());

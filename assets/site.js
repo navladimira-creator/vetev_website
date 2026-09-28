@@ -105,7 +105,7 @@
     const row = document.createElement("div"); row.className = "menu-item";
     const baked = Array.isArray(m.days) && m.days.length ? "peče se: " + U.bakeDaysText(m) : "";
     const descTxt = [m.desc, baked, m.price ? kc(m.price) : ""].filter(Boolean).join(" · ");
-    row.innerHTML = '<div><div class="n">' + U.esc(m.name) + '</div>' + (descTxt ? '<div class="d">' + U.esc(descTxt) + '</div>' : '') +
+    row.innerHTML = (m.photo ? '<img class="thumb" src="assets/foto/male/' + U.esc(m.photo) + '" alt="" loading="lazy" width="56" height="56">' : '<span class="thumb"></span>') + '<div class="mi-text"><div class="n">' + U.esc(m.name) + '</div>' + (descTxt ? '<div class="d">' + U.esc(descTxt) + '</div>' : '') +
       '<div class="w" hidden>Ve vybraný den se nepeče, nemusí být k dispozici.</div></div>' +
       '<div class="stepper"><button type="button" aria-label="Ubrat: ' + U.esc(m.name) + '">−</button><output class="num" aria-live="polite">0</output><button type="button" aria-label="Přidat: ' + U.esc(m.name) + '">+</button></div>';
     const [minus, plus] = row.querySelectorAll("button"), out = row.querySelector("output");

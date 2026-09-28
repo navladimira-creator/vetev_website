@@ -61,17 +61,18 @@ window.VETEV_CONFIG = {
   /* Nabídka pečiva k vyzvednutí.
    * id = krátký kód bez mezer a diakritiky (u už použitých položek neměnit).
    * desc = popis pod názvem, price = cena v Kč (null = cena se nezobrazuje).
+   * photo = název fotky ve složce assets/foto (bez fotky = "")
    * days = dny, kdy se položka peče (0 = neděle, 1 = pondělí … 6 = sobota).
    *        Bez "days" se peče každý den. Příklad jen pátek a sobota: days: [5, 6]
    *        Když si host položku objedná na jiný den, web ho upozorní, že nemusí být k dispozici. */
   pastry: [
-    { id: "chleb-vetev",     name: "Chléb Větev",               desc: "pšenice, žito, kmín",          price: null },
-    { id: "chleb-sestizrno", name: "Chléb Šestizrno",           desc: "pšenice, zápara ze 6 zrn",     price: null },
-    { id: "chleb-maly",      name: "Chléb malý kulatý",         desc: "žito, pšenice, kmín",          price: null },
-    { id: "bageta-dm",       name: "Dýňovo-mrkvová bageta",     desc: "",                             price: null },
-    { id: "zemle",           name: "Jogurtovo-máslová žemle",   desc: "",                             price: null },
-    { id: "loupak",          name: "Loupák",                    desc: "",                             price: null },
-    { id: "coko-loupak",     name: "Čoko loupák",               desc: "",                             price: null },
-    { id: "kolacky",         name: "Koláčky, různé druhy",      desc: "Náplně se liší podle nálady pekaře, přesný druh nejde objednat :-)", price: null }
+    { id: "chleb-vetev",     name: "Chléb Větev",               desc: "pšenice, žito, kmín",          price: null, photo: "chleb-vetev.jpg" },
+    { id: "chleb-sestizrno", name: "Chléb Šestizrno",           desc: "pšenice, zápara ze 6 zrn",     price: null, photo: "chleb-sestizrno.jpg" },
+    { id: "chleb-maly",      name: "Chléb malý kulatý",         desc: "žito, pšenice, kmín",          price: null, photo: "chleb-maly.jpg" },
+    { id: "bageta-dm",       name: "Dýňovo-mrkvová bageta",     desc: "",                             price: null, photo: "bageta-dm.jpg" },
+    { id: "zemle",           name: "Jogurtovo-máslová žemle",   desc: "",                             price: null, photo: "zemle.jpg" },
+    { id: "loupak",          name: "Loupák",                    desc: "",                             price: null, photo: "loupak.jpg" },
+    { id: "coko-loupak",     name: "Čoko loupák",               desc: "",                             price: null, photo: "" },
+    { id: "kolacky",         name: "Koláčky, různé druhy",      desc: "Náplně se liší podle nálady pekaře, přesný druh nejde objednat :-)", price: null, photo: "kolacky.jpg" }
   ]
 };

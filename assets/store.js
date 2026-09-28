@@ -40,7 +40,12 @@
         const since = new Date(); since.setDate(since.getDate() - 31);
         let first = true;
         return col.where("date", ">=", dkey(since)).onSnapshot(
-          () => { if (first) { first = false; return; } onChange(); },
+          snap => {
+            if (first) { first = false; return; }
+            // nové rezervace (ne ty, které právě uložilo tohle zařízení)
+            const added = snap.docChanges().filter(c => c.type === "added" && !c.doc.metadata.hasPendingWrites).map(c => toRow(c.doc));
+            onChange(added);
+          },
           err => console.error("Živé spojení:", err));
       },
       async update(id, patch) { await col.doc(id).update(patch); },
@@ -57,12 +62,14 @@
         const raw = localStorage.getItem(KEY);
         if (raw) return JSON.parse(raw);
       } catch (e) { /* prohlížeč neukládá – nevadí */ }
-      return seed();
+      const s = seed();
+      try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {}
+      return s;
     }
     function write(rows) {
       try { localStorage.setItem(KEY, JSON.stringify(rows)); } catch (e) {}
       memory = rows;
-      listeners.forEach(fn => fn());
+      listeners.forEach(fn => fn([]));
     }
     function seed() {
       const t = new Date(), d1 = new Date(t.getTime() + 864e5), d2 = new Date(t.getTime() + 2 * 864e5);
@@ -77,7 +84,10 @@
       ];
     }
     let memory = read();
-    window.addEventListener("storage", e => { if (e.key === KEY) { memory = read(); listeners.forEach(fn => fn()); } });
+    window.addEventListener("storage", e => { if (e.key === KEY) {
+      const known = new Set(memory.map(r => r.id)); memory = read();
+      const added = memory.filter(r => !known.has(r.id));
+      listeners.forEach(fn => fn(added)); } });
     return {
       mode: "demo",
       async add(rec) { write(memory.concat([Object.assign({ id: "r-" + Date.now().toString(36), done: false, created_at: new Date().toISOString() }, rec)])); },

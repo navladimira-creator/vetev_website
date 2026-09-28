@@ -6,12 +6,15 @@
 <title>Kavárna Větev · Mirotice</title>
 <meta name="description" content="Kavárna, pražírna, pekárna a prodejna Větev na náměstí v Miroticích. Káva z vlastní pražírny, kváskové chleby a pečivo z vlastní pekárny. Rezervujte si stůl nebo pečivo online.">
 <meta name="theme-color" content="#2E5A3C">
+<meta property="og:title" content="Kavárna Větev · Mirotice">
+<meta property="og:description" content="Kavárna, pražírna, pekárna a prodejna na náměstí v Miroticích. Rezervujte si stůl nebo pečivo online.">
+<meta property="og:image" content="assets/foto/chleb-vetev.jpg">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;800&family=Figtree:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="assets/styles.css?v=20260928e">
+<link rel="stylesheet" href="assets/styles.css?v=20260928f">
 </head>
 <body>
 <div class="demo-bar" id="demoBar" hidden>Ukázkový režim: rezervace se zatím ukládají jen v tomto prohlížeči.</div>
@@ -73,17 +76,20 @@
       </div>
       <div class="trio">
         <article>
+          <img class="card-photo" src="assets/foto/kavovar.jpg" alt="Baristka připravuje kávu na kávovaru v kavárně Větev" loading="lazy">
           <span class="k">01 · Kavárna</span>
           <h3>Posezení na náměstí</h3>
           <p>Espresso, filtr i mléčné nápoje z kávy, kterou známe od zeleného zrna až po šálek. Ideální na ranní kávu i odpolední setkání.</p>
         </article>
         <article>
+          <img class="card-photo" src="assets/foto/prazirna.jpg" alt="Balíček kávy z pražírny Větev" loading="lazy">
           <span class="k">02 · Pražírna</span>
           <h3>Káva z vlastní pražírny</h3>
           <p>Zrnkovou kávu pražíme sami. Koupíte ji u nás na baru, nebo pohodlně z domova.</p>
           <a data-href="eshop" href="https://www.produkty-vladimir.cz/kava/" target="_blank" rel="noopener">Do e-shopu s kávou →</a>
         </article>
         <article>
+          <img class="card-photo" src="assets/foto/chleb-vetev.jpg" alt="Kváskový chléb Větev z naší pekárny" loading="lazy">
           <span class="k">03 · Pekárna</span>
           <h3>Voňavé pečivo každý den</h3>
           <p>Křupavé chleby s žitným kvasem, loupáky, jogurtovo-máslové žemle a kopec dalších dobrot. Můžete si je zarezervovat předem a jen si objednávku vyzvednout.</p>
@@ -93,6 +99,26 @@
       <div class="amen" aria-label="Vybavení">
         <span>Vhodné pro rodiny s dětmi</span><span>Wi-Fi zdarma</span><span>Platba kartou</span><span>Parkování</span>
       </div>
+    </div>
+  </section>
+
+  <section class="block gallery-block" aria-label="Fotky z kavárny a pekárny">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="label">Z naší kavárny a pekárny</span>
+        <h2>Na co se u nás můžete těšit</h2>
+      </div>
+    </div>
+    <div class="gallery" tabindex="0">
+      <figure><img src="assets/foto/cappuccino.jpg" alt="Dvě cappuccina s latte art" loading="lazy"><figcaption>Cappuccino</figcaption></figure>
+      <figure><img src="assets/foto/loupak.jpg" alt="Loupáky s mákem a mandlemi" loading="lazy"><figcaption>Loupáky</figcaption></figure>
+      <figure><img src="assets/foto/filtrovana-kava.jpg" alt="Příprava filtrované kávy" loading="lazy"><figcaption>Filtrovaná káva</figcaption></figure>
+      <figure><img src="assets/foto/chleb-sestizrno.jpg" alt="Chléb Šestizrno" loading="lazy"><figcaption>Chléb Šestizrno</figcaption></figure>
+      <figure><img src="assets/foto/specialni-napoje.jpg" alt="Letní speciální nápoje a dezert" loading="lazy"><figcaption>Speciální nápoje</figcaption></figure>
+      <figure><img src="assets/foto/zemle.jpg" alt="Jogurtovo-máslové žemle v košíku" loading="lazy"><figcaption>Jogurtovo-máslové žemle</figcaption></figure>
+      <figure><img src="assets/foto/kolacky.jpg" alt="Koláčky z naší pekárny" loading="lazy"><figcaption>Koláčky</figcaption></figure>
+      <figure><img src="assets/foto/bageta-dm.jpg" alt="Dýňovo-mrkvové bagety" loading="lazy"><figcaption>Dýňovo-mrkvová bageta</figcaption></figure>
+      <figure><img src="assets/foto/chleb-maly.jpg" alt="Malý kulatý chléb" loading="lazy"><figcaption>Chléb malý kulatý</figcaption></figure>
     </div>
   </section>
 
@@ -210,9 +236,9 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="assets/config.js?v=20260928e"></script>
-<script src="assets/common.js?v=20260928e"></script>
-<script src="assets/store.js?v=20260928e"></script>
-<script src="assets/site.js?v=20260928e"></script>
+<script src="assets/config.js?v=20260928f"></script>
+<script src="assets/common.js?v=20260928f"></script>
+<script src="assets/store.js?v=20260928f"></script>
+<script src="assets/site.js?v=20260928f"></script>
 </body>
 </html>

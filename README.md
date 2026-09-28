@@ -77,3 +77,13 @@ Všechno běžné se mění v `assets/config.js`:
 - šablona systému pro klienty Vladimír PRO.
 
 **Tip pro práci s Claudem:** v novém chatu stačí napsat „pokračujeme na webu kavárny Větev, repozitář `navladimira-creator/vetev_website`“. Všechno podstatné je v tomto repozitáři.
+
+## Fotky
+- Fotky jsou ve složce `assets/foto` (zmenšené na web, bez údajů o poloze), miniatury pro nabídku pečiva v `assets/foto/male`.
+- Fotku k pečivu nastavíte v `assets/config.js` polem `photo`.
+
+## Upozornění na novou rezervaci (iPad)
+- Když přijde rezervace, v přehledu se ukáže banner a zazní zvuk. Zvuk se opakuje každých 20 s, dokud někdo neklepne na „OK, vidím“ nebo „Zobrazit“ (nejdéle 10 minut).
+- Safari pustí zvuk až po prvním klepnutí na obrazovku. Po otevření přehledu stačí jednou klepnout kamkoli. Tlačítko nahoře ukazuje stav zvuku a jde jím zvuk vypnout.
+- Dokud je přehled otevřený, obrazovka iPadu nezhasne.
+- Upozornění funguje jen s otevřeným přehledem. Zprávy i při zavřené aplikaci by potřebovaly placený tarif Firebase Blaze.
