@@ -54,8 +54,8 @@ window.VETEV_CONFIG = {
     lastTableBeforeClose: 60, // poslední rezervace stolu X minut před zavřením
     lastPickupBeforeClose: 30,// poslední vyzvednutí pečiva X minut před zavřením
     minLeadMinutes: 30,       // na dnešek nejdřív za X minut od teď
-    daysAhead: 60,            // jak daleko dopředu jde rezervovat stůl
-    pastryNextDayOnly: true   // pečivo jde objednat jen na následující den (nejbližší den, kdy je otevřeno)
+    daysAhead: 60,            // jak daleko dopředu jde rezervovat (stůl i pečivo)
+    earliestDay: 1            // 1 = rezervace nejdřív na zítřek (stůl i pečivo), 0 = i na dnešek
   },
 
   /* Nabídka pečiva k vyzvednutí.

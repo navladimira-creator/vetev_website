@@ -44,10 +44,13 @@
     if (!list.length) note.textContent = h ? "Na dnešek už volné časy nejsou. Vyberte prosím jiný den." : "V tento den máme zavřeno. Vyberte prosím jiný den.";
     if (list.includes(prev)) sel.value = prev; else if (list.includes(fallback)) sel.value = fallback;
   }
-  const minD = U.key(U.today()), maxD = U.key(new Date(Date.now() + R.daysAhead * 864e5));
+  /* Nejdřívější den rezervace: 0 = i dnes, 1 = nejdřív zítra */
+  const early = Number(R.earliestDay) || 0;
+  const dayAt = i => { const d = new Date(U.today()); d.setDate(d.getDate() + i); return d; };
+  const minD = U.key(dayAt(early)), maxD = U.key(dayAt(R.daysAhead));
   function firstOpenDay(beforeClose) {
-    for (let i = 0; i <= R.daysAhead; i++) {
-      const d = new Date(U.today().getTime() + i * 864e5), h = U.hoursFor(d);
+    for (let i = early; i <= R.daysAhead; i++) {
+      const d = dayAt(i), h = U.hoursFor(d);
       if (!h) continue;
       if (i === 0) { const n = new Date(); if (n.getHours() * 60 + n.getMinutes() + R.minLeadMinutes > U.toMin(h[1]) - beforeClose) continue; }
       return U.key(d);
@@ -61,26 +64,15 @@
     return run;
   }
   const refreshT = setupDate("t", R.lastTableBeforeClose, "10:00");
-
-  /* Pečivo jen na následující den: nejbližší další den, kdy je otevřeno */
-  function nextOpenDay() {
-    for (let i = 1; i <= 14; i++) { const d = new Date(U.today().getTime() + i * 864e5); d.setHours(0, 0, 0, 0); if (U.hoursFor(d)) return U.key(d); }
-    return U.key(new Date(U.today().getTime() + 864e5));
-  }
-  let refreshP;
-  if (R.pastryNextDayOnly) {
-    const di = $("pDate"), nd = nextOpenDay();
-    di.min = nd; di.max = nd; di.value = nd; di.readOnly = true;
-    $("pDateHint").textContent = "Pečivo přijímáme vždy na následující den: " + U.fmtLong(U.fromKey(nd)).toLowerCase() + ".";
+  const runP = setupDate("p", R.lastPickupBeforeClose, "09:00");
+  $("pDate").addEventListener("change", () => checkBake());
+  const refreshP = () => { runP(); checkBake(); };
+  if (early >= 1) {
+    const txt = "Rezervace přijímáme nejdříve na zítřek. Na dnešek nám prosím zavolejte na " + C.cafe.phone + ".";
+    $("tDateHint").textContent = txt; $("tDateHint").hidden = false;
+    $("pDateHint").textContent = "Pečivo objednávejte nejdříve na zítřek. Na dnešek nám prosím zavolejte na " + C.cafe.phone + ".";
     $("pDateHint").hidden = false;
-    refreshP = () => { di.value = nd; fillSlots("pDate", "pTime", "pClosed", R.lastPickupBeforeClose, "09:00"); checkBake(); };
-    refreshP();
-  } else {
-    const run = setupDate("p", R.lastPickupBeforeClose, "09:00");
-    $("pDate").addEventListener("change", () => checkBake());
-    refreshP = () => { run(); checkBake(); };
   }
-  const pMin = () => $("pDate").min || minD, pMax = () => $("pDate").max || maxD;
 
   /* ---------- Počet osob ---------- */
   let pax = 2;
@@ -142,8 +134,7 @@
   function contact(p, err) {
     const name = $(p + "Name").value.trim().replace(/\s+/g, " "), phone = $(p + "Phone").value.trim(), email = $(p + "Email").value.trim();
     const date = $(p + "Date").value, time = $(p + "Time").value;
-    const lo = p === "p" ? pMin() : minD, hi = p === "p" ? pMax() : maxD;
-    if (!date || date < lo || date > hi) { err.textContent = lo === hi ? "Objednat lze jen na " + U.fmtLong(U.fromKey(lo)).toLowerCase() + "." : "Vyberte prosím datum mezi dneškem a " + U.fmtLong(U.fromKey(hi)).toLowerCase() + "."; return null; }
+    if (!date || date < minD || date > maxD) { err.textContent = "Vyberte prosím datum " + (early ? "od zítřka" : "od dneška") + " do " + U.fmtLong(U.fromKey(maxD)).toLowerCase().replace(/^\S+ /, "") + "."; return null; }
     if (!time) { err.textContent = "Na vybraný den není volný čas. Zvolte prosím jiný den."; return null; }
     if (name.split(" ").length < 2 || name.length < 3) { err.textContent = "Vyplňte prosím jméno i příjmení."; $(p + "Name").focus(); return null; }
     if (!phoneOk(phone)) { err.textContent = "Zkontrolujte prosím telefonní číslo."; $(p + "Phone").focus(); return null; }
@@ -185,7 +176,7 @@
       const list = Object.entries(items).map(([k, q]) => q + "× " + U.pastryById[k].name).join(", ");
       showDone("Pečivo k vyzvednutí", "Děkujeme, pečivo vám připravíme",
         [["Vyzvednutí", U.fmtLong(U.fromKey(rec.date)) + ", " + rec.time], ["Objednávka", list]].concat(priced ? [["Celkem orientačně", $("pTotal").textContent]] : []).concat([["Na jméno", rec.name]]));
-      $("formP").reset(); C.pastry.forEach(m => m._reset()); if (!R.pastryNextDayOnly) $("pDate").value = firstOpenDay(R.lastPickupBeforeClose); refreshP();
+      $("formP").reset(); C.pastry.forEach(m => m._reset()); $("pDate").value = firstOpenDay(R.lastPickupBeforeClose); refreshP();
     }
   });
 })();
