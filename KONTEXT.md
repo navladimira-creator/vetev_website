@@ -67,9 +67,25 @@ Chléb Větev (pšenice, žito, kmín) · Chléb Šestizrno (pšenice, zápara z
 - Google Analytics musel být při zakládání projektu zapnutý. Nevadí to.
 - Doména `navladimira-creator.github.io` je přidaná v Authentication → Settings → Authorized domains. Při vlastní doméně je potřeba přidat i ji.
 
+## Směr do budoucna: jednotná provozní aplikace „Větev provoz“
+Vladimír chce postupně přidávat další systémy (jako další **rozpis směn**) a mít je všechny **v jedné aplikaci**, podobně jako v CRM. Dohodnutá pravidla:
+
+1. **Jedna aplikace, jedna ikona.** Po přihlášení je menu se sekcemi **Rezervace · Směny · …** a každý systém je jeden modul. Veřejný web pro hosty (`index.html`) zůstává samostatně.
+2. **Jeden Firebase projekt pro vše:** `vetev-rezervace`. Pro nové moduly se nezakládají nové projekty. Každý modul má vlastní kolekci ve Firestore (např. `reservations`, `shifts`, `employees`).
+3. **Vlastní účty a role.** Při stavbě směn se přejde ze společného účtu na účet pro každého zaměstnance:
+   - **majitel:** vidí a spravuje vše,
+   - **vedoucí:** plánuje směny a spravuje rezervace,
+   - **obsluha:** vidí rezervace a svoje směny.
+   Role se uloží ve Firestore (kolekce `staff`/`employees`) a hlídají je pravidla v `firestore.rules`, která nahradí dnešní seznam e-mailů ve funkci `isStaff()`.
+4. **Postup při stavbě směn:** z `dashboard.html` udělat společnou aplikaci s menu (rezervace = první modul) a směny přidat jako druhý modul. Nestavět je jako samostatnou věc, která by se později spojovala.
+5. **Jednotný vzhled.** Nové moduly používají stejné `styles.css`, barvy, písma a ovládací prvky jako rezervace.
+6. **Šablona pro klienty Vladimír PRO:** každá kavárna dostane **vlastní kopii aplikace a vlastní Firebase projekt**, ne jednu sdílenou aplikaci pro všechny. Je to jednodušší a data kaváren se nemůžou promíchat. Proto je vhodné držet všechno specifické pro kavárnu v `config.js`.
+7. **Údržba:** s každým modulem roste. Stavět jednoduše a nepřidávat funkce „do zásoby“.
+
 ## Další kroky (nápady)
 1. **Upozornění personálu na novou rezervaci**: e-mail nebo zpráva do telefonu (Telegram je nejjednodušší, WhatsApp vyžaduje ověření firmy u Mety).
 2. **Fotky** kavárny a pečiva na úvodní stránku (Vladimír je pošle).
 3. **Ceny pečiva**: pole `price` v `config.js`. Pak se zobrazí i „Celkem orientačně“.
 4. **Vlastní doména**, např. rezervace.cafevetev.cz.
-5. **Šablona pro Vladimír PRO**: stejný systém pro jiné kavárny (jiný název, barvy, nabídka, vlastní Firebase projekt).
+5. **Rozpis směn**: druhý modul v jednotné aplikaci (viz výše). Začít vlastními účty a rolemi.
+6. **Šablona pro Vladimír PRO**: stejný systém pro jiné kavárny (jiný název, barvy, nabídka, vlastní Firebase projekt).
