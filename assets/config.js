@@ -54,12 +54,16 @@ window.VETEV_CONFIG = {
     lastTableBeforeClose: 60, // poslední rezervace stolu X minut před zavřením
     lastPickupBeforeClose: 30,// poslední vyzvednutí pečiva X minut před zavřením
     minLeadMinutes: 30,       // na dnešek nejdřív za X minut od teď
-    daysAhead: 60             // jak daleko dopředu jde rezervovat
+    daysAhead: 60,            // jak daleko dopředu jde rezervovat stůl
+    pastryNextDayOnly: true   // pečivo jde objednat jen na následující den (nejbližší den, kdy je otevřeno)
   },
 
   /* Nabídka pečiva k vyzvednutí.
    * id = krátký kód bez mezer a diakritiky (u už použitých položek neměnit).
-   * desc = popis pod názvem, price = cena v Kč (null = cena se nezobrazuje). */
+   * desc = popis pod názvem, price = cena v Kč (null = cena se nezobrazuje).
+   * days = dny, kdy se položka peče (0 = neděle, 1 = pondělí … 6 = sobota).
+   *        Bez "days" se peče každý den. Příklad jen pátek a sobota: days: [5, 6]
+   *        Když si host položku objedná na jiný den, web ho upozorní, že nemusí být k dispozici. */
   pastry: [
     { id: "chleb-vetev",     name: "Chléb Větev",               desc: "pšenice, žito, kmín",          price: null },
     { id: "chleb-sestizrno", name: "Chléb Šestizrno",           desc: "pšenice, zápara ze 6 zrn",     price: null },

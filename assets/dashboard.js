@@ -99,7 +99,7 @@
     $("prepList").innerHTML = keys.map(i => '<li><b class="num">' + totals[i] + '×</b>' + U.esc(U.pastryById[i] ? U.pastryById[i].name : i) + '</li>').join("");
     $("pSum").textContent = pl.length ? pl.length + " objednávek" : "";
     $("pList").innerHTML = pl.length ? pl.map(r => '<li class="item' + (r.done ? " is-done" : "") + '">' + head(r) +
-      '<div class="goods">' + Object.entries(r.items || {}).map(([i, n]) => '<span class="chip num">' + U.esc(n) + '× ' + U.esc(U.pastryById[i] ? U.pastryById[i].name : i) + '</span>').join("") + '</div>' +
+      '<div class="goods">' + Object.entries(r.items || {}).map(([i, n]) => { const off = !U.bakedOn(U.pastryById[i], U.fromKey(r.date)); return '<span class="chip num' + (off ? ' warn' : '') + '"' + (off ? ' title="V tento den se obvykle nepeče"' : '') + '>' + (off ? '⚠ ' : '') + U.esc(n) + '× ' + U.esc(U.pastryById[i] ? U.pastryById[i].name : i) + '</span>'; }).join("") + '</div>' +
       (r.note ? '<div class="note">' + U.esc(r.note) + '</div>' : '') + '</div>' + actions(r) + '</li>').join("")
       : '<li class="empty">Na tento den není objednané žádné pečivo.</li>';
   }

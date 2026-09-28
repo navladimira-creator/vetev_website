@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;800&family=Figtree:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="assets/styles.css?v=20260928c">
+<link rel="stylesheet" href="assets/styles.css?v=20260928d">
 </head>
 <body>
 <div class="demo-bar" id="demoBar" hidden>Ukázkový režim: rezervace se zatím ukládají jen v tomto prohlížeči.</div>
@@ -151,6 +151,7 @@
               <div class="field"><label for="pDate">Den vyzvednutí</label><input type="date" id="pDate" required></div>
               <div class="field"><label for="pTime">Čas vyzvednutí</label><select id="pTime" required></select></div>
             </div>
+            <p class="hint" id="pDateHint" hidden></p>
             <p class="closed-note" id="pClosed" hidden></p>
             <div class="field"><label for="pName">Jméno a příjmení</label><input type="text" id="pName" autocomplete="name" required></div>
             <div class="row">
@@ -158,6 +159,7 @@
               <div class="field"><label for="pEmail">E-mail</label><input type="email" id="pEmail" autocomplete="email" required></div>
             </div>
             <div class="field"><label for="pNote">Poznámka <span class="hint">(nepovinné)</span></label><textarea id="pNote" maxlength="500" placeholder="Např. nakrájet chléb, zabalit jako dárek…"></textarea></div>
+            <p class="closed-note" id="pWarn" role="status" hidden></p>
             <p class="hint">Platí se až při vyzvednutí.</p>
             <p class="err" id="pErr" role="alert"></p>
             <button class="btn btn-primary" type="submit" id="pSubmit">Objednat pečivo</button>
@@ -207,9 +209,9 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="assets/config.js?v=20260928c"></script>
-<script src="assets/common.js?v=20260928c"></script>
-<script src="assets/store.js?v=20260928c"></script>
-<script src="assets/site.js?v=20260928c"></script>
+<script src="assets/config.js?v=20260928d"></script>
+<script src="assets/common.js?v=20260928d"></script>
+<script src="assets/store.js?v=20260928d"></script>
+<script src="assets/site.js?v=20260928d"></script>
 </body>
 </html>
