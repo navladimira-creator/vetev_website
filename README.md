@@ -64,3 +64,16 @@ Všechno běžné se mění v `assets/config.js`:
 - Host z webu může rezervaci jen **vložit**. Cizí rezervace nikdy nevidí.
 - Číst, označovat a rušit rezervace může jen přihlášený účet, jehož e-mail je uvedený v pravidlech (`firebase/firestore.rules`).
 - Repozitář je veřejný, takže je v něm vidět kód. Hesla ani tajné klíče v něm nejsou a být nesmí.
+
+## Stav projektu (28. 9. 2026)
+
+**Hotovo:** web kavárny s rezervací stolů (max. 6 osob) a pečiva, přehled pro personál na iPad, databáze Firebase (projekt `vetev-rezervace`, Frankfurt), přihlášení personálu `budnavetvi@gmail.com`. Web běží na GitHub Pages.
+
+**Nápady na další kroky:**
+- upozornění personálu na novou rezervaci (e-mail / zpráva do telefonu),
+- fotky kavárny a pečiva na úvodní stránku,
+- ceny pečiva (`price` v `assets/config.js`),
+- vlastní doména (např. rezervace.cafevetev.cz),
+- šablona systému pro klienty Vladimír PRO.
+
+**Tip pro práci s Claudem:** v novém chatu stačí napsat „pokračujeme na webu kavárny Větev, repozitář `navladimira-creator/vetev_website`“. Všechno podstatné je v tomto repozitáři.
