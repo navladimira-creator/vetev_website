@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;800&family=Figtree:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="assets/styles.css?v=20260930a">
+<link rel="stylesheet" href="assets/styles.css?v=20260930b">
 </head>
 <body>
 <div class="demo-bar" id="demoBar" hidden>Ukázkový režim: rezervace se zatím ukládají jen v tomto prohlížeči.</div>
@@ -169,7 +169,7 @@
               <div class="field"><label for="tEmail">E-mail</label><input type="email" id="tEmail" autocomplete="email" required></div>
             </div>
             <div class="field"><label for="tNote">Speciální požadavek <span class="hint">(nepovinné)</span></label><textarea id="tNote" maxlength="500" placeholder="Např. dětská židlička, stůl u okna, oslava, alergie…"></textarea></div>
-            <label class="check"><input type="checkbox" id="tNews"><span>Chci občas dostávat novinky a nabídky Kavárny Větev e-mailem. Souhlas můžu kdykoli odvolat.</span></label>
+            <label class="check"><input type="checkbox" id="tNews"><span>Chci občas dostávat novinky a nabídky Kavárny Větev e-mailem. Souhlas můžu kdykoli odvolat. <a class="fine" href="ochrana-udaju.html" target="_blank" rel="noopener">Více</a></span></label>
             <p class="remember" id="tRemember" hidden>Údaje jsme vyplnili z minula (uloženo jen v tomto zařízení). <button type="button" class="linkish" data-forget>Zapomenout</button></p>
             <p class="err" id="tErr" role="alert"></p>
             <button class="btn btn-primary" type="submit" id="tSubmit">Odeslat rezervaci</button>
@@ -197,7 +197,7 @@
               <div class="field"><label for="pEmail">E-mail</label><input type="email" id="pEmail" autocomplete="email" required></div>
             </div>
             <div class="field"><label for="pNote">Poznámka <span class="hint">(nepovinné)</span></label><textarea id="pNote" maxlength="500" placeholder="Např. nakrájet chléb, zabalit jako dárek…"></textarea></div>
-            <label class="check"><input type="checkbox" id="pNews"><span>Chci občas dostávat novinky a nabídky Kavárny Větev e-mailem. Souhlas můžu kdykoli odvolat.</span></label>
+            <label class="check"><input type="checkbox" id="pNews"><span>Chci občas dostávat novinky a nabídky Kavárny Větev e-mailem. Souhlas můžu kdykoli odvolat. <a class="fine" href="ochrana-udaju.html" target="_blank" rel="noopener">Více</a></span></label>
             <p class="remember" id="pRemember" hidden>Údaje jsme vyplnili z minula (uloženo jen v tomto zařízení). <button type="button" class="linkish" data-forget>Zapomenout</button></p>
             <p class="closed-note" id="pWarn" role="status" hidden></p>
             <p class="hint">Platí se až při vyzvednutí.</p>
@@ -242,6 +242,7 @@
       <a data-href="facebook" href="#" target="_blank" rel="noopener">Facebook</a>
       <a data-href="instagram" href="#" target="_blank" rel="noopener">Instagram</a>
       <a data-href="eshop" href="#" target="_blank" rel="noopener">E-shop</a>
+      <a href="ochrana-udaju.html">Ochrana osobních údajů</a>
       <a href="dashboard.html">Pro personál</a>
     </nav>
   </div>
@@ -249,9 +250,9 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="assets/config.js?v=20260930a"></script>
-<script src="assets/common.js?v=20260930a"></script>
-<script src="assets/store.js?v=20260930a"></script>
-<script src="assets/site.js?v=20260930a"></script>
+<script src="assets/config.js?v=20260930b"></script>
+<script src="assets/common.js?v=20260930b"></script>
+<script src="assets/store.js?v=20260930b"></script>
+<script src="assets/site.js?v=20260930b"></script>
 </body>
 </html>

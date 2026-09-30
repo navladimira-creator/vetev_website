@@ -275,3 +275,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--green);outline:none;b
 .again{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:12px 14px;margin-bottom:10px;border-radius:12px;background:var(--green-soft)}
 .again>div{display:grid;gap:2px}
 .again #againList{font-weight:600}
+
+/* Stránka Ochrana osobních údajů */
+.legal{max-width:760px;display:grid;gap:14px}
+.legal h1{font-size:clamp(34px,5vw,52px);font-weight:800;line-height:1.05}
+.legal h2{font-size:24px;font-weight:800;margin-top:22px}
+.legal h3{font-size:19px;font-weight:700;margin-top:6px}
+.legal .lead{font-size:19px;color:var(--muted)}
+.legal ul{margin:0;padding-left:22px;display:grid;gap:6px}
+.legal a{color:var(--green);font-weight:600}
+.check .fine{color:inherit;text-decoration:underline;font-weight:400}

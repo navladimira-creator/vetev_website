@@ -26,6 +26,8 @@ window.VETEV_CONFIG = {
     phone: "+420 737 927 337",
     email: "budnavetvi@gmail.com",
     ico: "02980118",
+    operator: "Produkty Vladimír s.r.o.",             // provozovatel (správce osobních údajů)
+    operatorAddress: "Dolní Nerestce 16, 398 04 Nerestce",
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=N%C3%A1m%C4%9Bst%C3%AD+Mikol%C3%A1%C5%A1e+Al%C5%A1e+68%2C+Mirotice",
     mapsEmbed: "https://www.google.com/maps?q=N%C3%A1m%C4%9Bst%C3%AD%20Mikol%C3%A1%C5%A1e%20Al%C5%A1e%2068%2C%20398%2001%20Mirotice&output=embed",
     facebook: "https://www.facebook.com/vetevkavarna/",
