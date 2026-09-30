@@ -49,7 +49,13 @@
           err => console.error("Živé spojení:", err));
       },
       async update(id, patch) { await col.doc(id).update(patch); },
-      async remove(id) { await col.doc(id).delete(); }
+      async remove(id) { await col.doc(id).delete(); },
+      // souhlas s newsletterem – ukládá se zvlášť, jeden záznam na e-mail
+      async subscribe(p) {
+        const email = p.email.trim().toLowerCase();
+        await db.collection("subscribers").doc(email.replace(/\//g, "_")).set({ email, name: p.name, source: p.source, created_at: firebase.firestore.FieldValue.serverTimestamp() });
+      },
+      async subscribers() { const s = await db.collection("subscribers").get(); return s.docs.map(toRow); }
     };
   }
 
@@ -97,14 +103,21 @@
       async range(from, to) { return memory.filter(r => r.date >= from && r.date <= to); },
       watch(fn) { listeners.add(fn); return () => listeners.delete(fn); },
       async update(id, patch) { write(memory.map(r => r.id === id ? Object.assign({}, r, patch) : r)); },
-      async remove(id) { write(memory.filter(r => r.id !== id)); }
+      async remove(id) { write(memory.filter(r => r.id !== id)); },
+      async subscribe(p) {
+        let l = []; try { l = JSON.parse(localStorage.getItem("vetev-demo-subs") || "[]"); } catch (e) {}
+        const email = p.email.trim().toLowerCase();
+        if (!l.some(x => x.email === email)) l.push({ email, name: p.name, source: p.source, created_at: new Date().toISOString() });
+        try { localStorage.setItem("vetev-demo-subs", JSON.stringify(l)); } catch (e) {}
+      },
+      async subscribers() { try { return JSON.parse(localStorage.getItem("vetev-demo-subs") || "[]"); } catch (e) { return []; } }
     };
   }
 
   /* Databáze je nastavená, ale knihovna se nenačetla (výpadek sítě) → neukládat potichu do prohlížeče */
   function brokenStore() {
     const fail = async () => { throw new Error("Databázi se nepodařilo načíst. Zkontrolujte připojení k internetu."); };
-    return { mode: "offline", add: fail, session: async () => null, login: fail, logout: async () => {}, range: fail, watch: () => () => {}, update: fail, remove: fail };
+    return { mode: "offline", add: fail, session: async () => null, login: fail, logout: async () => {}, range: fail, watch: () => () => {}, update: fail, remove: fail, subscribe: fail, subscribers: fail };
   }
 
   window.VetevStore = live ? firebaseStore() : configured ? brokenStore() : demoStore();

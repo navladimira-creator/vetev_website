@@ -118,6 +118,7 @@
     minus.onclick = () => { qty[m.id] = Math.max(0, qty[m.id] - 1); upd(); };
     plus.onclick = () => { qty[m.id] = Math.min(99, qty[m.id] + 1); upd(); };
     m._reset = () => { qty[m.id] = 0; upd(); };
+    m._set = n => { qty[m.id] = Math.max(0, Math.min(99, n)); upd(); };
     upd(); $("menu").appendChild(row);
   });
 
@@ -158,14 +159,56 @@
     finally { btn.disabled = false; btn.textContent = label; }
   }
 
+  /* ---------- Zapamatování údajů a minulé objednávky (jen v tomto zařízení) ---------- */
+  const LS = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  };
+  const HOST = "vetev-host", LAST = "vetev-last-pastry";
+  function fillHost() {
+    const h = LS.get(HOST);
+    ["t", "p"].forEach(p => {
+      if (h) { if (!$(p + "Name").value) $(p + "Name").value = h.name || ""; if (!$(p + "Phone").value) $(p + "Phone").value = h.phone || ""; if (!$(p + "Email").value) $(p + "Email").value = h.email || ""; }
+      $(p + "Remember").hidden = !h;
+    });
+  }
+  function rememberHost(c) { LS.set(HOST, { name: c.name, phone: c.phone, email: c.email }); }
+  document.querySelectorAll("[data-forget]").forEach(b => b.addEventListener("click", () => {
+    LS.del(HOST); LS.del(LAST);
+    ["t", "p"].forEach(p => { $(p + "Name").value = ""; $(p + "Phone").value = ""; $(p + "Email").value = ""; $(p + "Remember").hidden = true; });
+    showAgain();
+  }));
+  function showAgain() {
+    const last = LS.get(LAST), items = last && last.items ? Object.entries(last.items).filter(([k]) => U.pastryById[k]) : [];
+    $("again").hidden = !items.length;
+    if (!items.length) return;
+    $("againList").textContent = items.map(([k, q]) => q + "× " + U.pastryById[k].name).join(", ");
+    $("againBtn").textContent = "Objednat znovu";
+  }
+  $("againBtn").onclick = () => {
+    const last = LS.get(LAST); if (!last) return;
+    C.pastry.forEach(m => m._set(Number(last.items[m.id]) || 0));
+    $("againBtn").textContent = "Přidáno ✓";
+    $("pDate").focus();
+  };
+  fillHost(); showAgain();
+
+  function subscribeIf(p, c, source) {
+    if (!$(p + "News").checked) return false;
+    store.subscribe({ email: c.email, name: c.name, source }).catch(e => console.warn("Newsletter:", e));
+    return true;
+  }
+
   $("formT").addEventListener("submit", async e => {
     e.preventDefault(); const err = $("tErr"); err.textContent = "";
     const c = contact("t", err); if (!c) return;
     const rec = Object.assign({ kind: "table", people: pax, items: null, note: $("tNote").value.trim() }, c);
     if (await send(rec, err, $("tSubmit"))) {
+      const nl = subscribeIf("t", c, "table"); rememberHost(c);
       showDone("Rezervace stolu", "Děkujeme, stůl máte rezervovaný",
-        [["Kdy", U.fmtLong(U.fromKey(rec.date)) + ", " + rec.time], ["Počet osob", String(rec.people)], ["Na jméno", rec.name]]);
-      $("formT").reset(); setPax(2); $("tDate").value = firstOpenDay(R.lastTableBeforeClose); refreshT();
+        [["Kdy", U.fmtLong(U.fromKey(rec.date)) + ", " + rec.time], ["Počet osob", String(rec.people)], ["Na jméno", rec.name]].concat(nl ? [["Novinky e-mailem", "Přihlášeno, děkujeme"]] : []));
+      $("formT").reset(); setPax(2); $("tDate").value = firstOpenDay(R.lastTableBeforeClose); refreshT(); fillHost();
     }
   });
 
@@ -178,10 +221,21 @@
     const c = contact("p", err); if (!c) return;
     const rec = Object.assign({ kind: "pastry", people: null, items, note: $("pNote").value.trim() }, c);
     if (await send(rec, err, $("pSubmit"))) {
+      const nl = subscribeIf("p", c, "pastry"); rememberHost(c); LS.set(LAST, { items });
       const list = Object.entries(items).map(([k, q]) => q + "× " + U.pastryById[k].name).join(", ");
       showDone("Pečivo k vyzvednutí", "Děkujeme, pečivo vám připravíme",
-        [["Vyzvednutí", U.fmtLong(U.fromKey(rec.date)) + ", " + rec.time], ["Objednávka", list]].concat(priced ? [["Celkem orientačně", $("pTotal").textContent]] : []).concat([["Na jméno", rec.name]]));
-      $("formP").reset(); C.pastry.forEach(m => m._reset()); $("pDate").value = firstOpenDay(R.lastPickupBeforeClose); refreshP();
+        [["Vyzvednutí", U.fmtLong(U.fromKey(rec.date)) + ", " + rec.time], ["Objednávka", list]].concat(priced ? [["Celkem orientačně", $("pTotal").textContent]] : []).concat([["Na jméno", rec.name]]).concat(nl ? [["Novinky e-mailem", "Přihlášeno, děkujeme"]] : []));
+      $("formP").reset(); C.pastry.forEach(m => m._reset()); $("pDate").value = firstOpenDay(R.lastPickupBeforeClose); refreshP(); fillHost(); showAgain();
     }
   });
+
+  /* ---------- Galerie: listování šipkami pro myš ---------- */
+  const gal = $("gallery");
+  if (gal) {
+    const step = () => { const f = gal.querySelector("figure"); return f ? (f.getBoundingClientRect().width + 14) * Math.max(1, Math.floor(gal.clientWidth / (f.getBoundingClientRect().width + 14)) - 1) : gal.clientWidth * .8; };
+    const edges = () => { $("galPrev").disabled = gal.scrollLeft < 5; $("galNext").disabled = gal.scrollLeft + gal.clientWidth > gal.scrollWidth - 5; };
+    $("galPrev").onclick = () => gal.scrollBy({ left: -step(), behavior: "smooth" });
+    $("galNext").onclick = () => gal.scrollBy({ left: step(), behavior: "smooth" });
+    gal.addEventListener("scroll", edges, { passive: true }); window.addEventListener("resize", edges); edges();
+  }
 })();

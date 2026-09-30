@@ -87,3 +87,9 @@ Všechno běžné se mění v `assets/config.js`:
 - Safari pustí zvuk až po prvním klepnutí na obrazovku. Po otevření přehledu stačí jednou klepnout kamkoli. Tlačítko nahoře ukazuje stav zvuku a jde jím zvuk vypnout.
 - Dokud je přehled otevřený, obrazovka iPadu nezhasne.
 - Upozornění funguje jen s otevřeným přehledem. Zprávy i při zavřené aplikaci by potřebovaly placený tarif Firebase Blaze.
+
+## Newsletter, zapamatované údaje, „Objednat znovu“
+- Ve formulářích je nezaškrtnuté políčko se souhlasem s novinkami. E-maily se ukládají zvlášť do sbírky `subscribers` (jeden záznam na e-mail).
+- V přehledu pro personál je tlačítko **Newsletter**, které stáhne seznam jako CSV (jde otevřít v Excelu nebo nahrát do Ecomailu/Mailchimpu).
+- Po nasazení je nutné nahrát nová pravidla z `firebase/firestore.rules` do Firebase (Firestore Database → Rules → Publish). Bez nich se souhlasy neuloží, rezervace ale fungují dál.
+- Web si v zařízení hosta pamatuje jméno, telefon, e-mail a poslední objednávku pečiva. Host je může smazat odkazem „Zapomenout“.

@@ -223,6 +223,24 @@
     return { push, test: () => push([{ id: "test-" + Date.now(), kind: "table", date: U.key(U.today()), time: "10:00", name: "Zkušební upozornění", people: 2 }]) };
   })();
 
+  /* ---------- Export e-mailů se souhlasem s newsletterem ---------- */
+  $("newsBtn").onclick = async () => {
+    const b = $("newsBtn"); b.disabled = true;
+    try {
+      const list = (await store.subscribers()).sort((a, c) => String(a.created_at).localeCompare(String(c.created_at)));
+      if (!list.length) { toast("Zatím nikdo nedal souhlas s newsletterem."); return; }
+      const q = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+      const csv = "\ufeff" + ["E-mail;Jméno;Kde souhlasil;Datum souhlasu"].concat(list.map(r =>
+        [r.email, r.name, r.source === "table" ? "rezervace stolu" : "objednávka pečiva", r.created_at ? new Date(r.created_at).toLocaleDateString("cs-CZ") : ""].map(q).join(";"))).join("\r\n");
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+      a.download = "vetev-newsletter-" + U.key(new Date()) + ".csv";
+      document.body.appendChild(a); a.click(); a.remove();
+      toast("Staženo " + list.length + " e-mailů.");
+    } catch (e) { console.error(e); toast("Seznam se nepodařilo načíst. Jsou ve Firebase nahraná nová pravidla?"); }
+    finally { b.disabled = false; }
+  };
+
   /* O půlnoci posunout „dnes“ */
   let lastDay = U.key(U.today());
   setInterval(() => { const k = U.key(U.today()); if (k !== lastDay) { if (U.key(sel) === lastDay) sel = U.today(); lastDay = k; load(true); } }, 60000);

@@ -36,6 +36,17 @@ service cloud.firestore {
       allow read, update, delete: if isStaff();                        // personál vidí a upravuje
     }
 
+    // Souhlas s newsletterem – host smí jen přidat svůj e-mail, seznam vidí jen personál
+    match /subscribers/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['email','name','source','created_at'])
+        && str(request.resource.data.email, 5, 160)
+        && request.resource.data.email == id
+        && str(request.resource.data.name, 3, 120)
+        && request.resource.data.source in ['table', 'pastry']
+        && request.resource.data.created_at == request.time;
+      allow read, delete: if isStaff();
+    }
+
     // Vše ostatní je zakázané
     match /{document=**} {
       allow read, write: if false;
