@@ -241,6 +241,20 @@
     finally { b.disabled = false; }
   };
 
+  /* ---------- Instalace jako aplikace (Chrome na Androidu a počítači) ---------- */
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(e => console.warn("SW:", e));
+  let installEvt = null;
+  const standalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvt = e; if (!standalone()) $("installBtn").hidden = false; });
+  window.addEventListener("appinstalled", () => { $("installBtn").hidden = true; installEvt = null; toast("Aplikace je nainstalovaná."); });
+  $("installBtn").onclick = async () => {
+    if (!installEvt) return;
+    installEvt.prompt();
+    const r = await installEvt.userChoice.catch(() => null);
+    if (r && r.outcome === "accepted") $("installBtn").hidden = true;
+    installEvt = null;
+  };
+
   /* O půlnoci posunout „dnes“ */
   let lastDay = U.key(U.today());
   setInterval(() => { const k = U.key(U.today()); if (k !== lastDay) { if (U.key(sel) === lastDay) sel = U.today(); lastDay = k; load(true); } }, 60000);
